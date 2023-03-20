@@ -1,0 +1,94 @@
+﻿@model LanchesMac.ViewModels.UserViewModel;
+
+<a href="@Url.Action("New", "User")"><i style="font-size:30px" class="bi bi-plus-circle"></i></a>
+<table id="tableUsers" class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th id="nome">Nome</th>
+			<th id="idade">Idade</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				...
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Confirmar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+<script>
+	var model = @(Html.Raw(Json.Serialize(Model)));
+
+	var table = $('#tableUsers').DataTable({
+		dom: 'Bfrtip',
+		language: {
+			"sEmptyTable": "Nenhum registro encontrado",
+			"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+			"sInfoFiltered": "(Filtrados de MAX registros)",
+			"sInfoPostFix": "",
+			"sInfoThousands": ".",
+			"sLengthMenu": "MENU resultados por página",
+			"sLoadingRecords": "Carregando...",
+			"sProcessing": "Processando...",
+			"sZeroRecords": "Nenhum registro encontrado",
+			"sSearch": "<i class='fas fa-search'></i> Pesquisar ",
+			"oPaginate": {
+				"sNext": "Próximo",
+				"sPrevious": "Anterior",
+				"sFirst": "Primeiro",
+				"sLast": "Último"
+			},
+		},
+		"deferRender": true,
+		"bAutoWidth": true,
+		"order": [
+			[0, 'asc']
+		],
+		"pageLength": 10,
+		data: model.users,
+		columns: [
+			{ "data": "id" },
+			{ "data": "nome" },
+			{ "data": "idade" },
+			{
+				"data": "id",
+				render: function (data, type, full, meta) {
+
+					return '<a class="btn_Edit btn btn-primary" type="button" href="/User/Edit?Id=' + data + '"><i class="bi bi-pencil-square"></i></a>';
+				}
+			},
+			{
+				"data": "id",
+				render: function (data, type, full, meta) {
+
+					return '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">'+
+						'<i class="bi bi-trash"></i>' +
+							'</button>';
+
+					//return '<a class="btn_Delete" type="button" href="/User/Delete?Id=' + data + '"><i class="bi bi-trash"></i></i></a>';
+
+				}
+			}
+
+		]
+	});
+</script>
