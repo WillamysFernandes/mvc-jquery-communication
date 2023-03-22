@@ -5,6 +5,7 @@ using LanchesMac.ViewModels;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace LanchesMac.Controllers
@@ -29,41 +30,19 @@ namespace LanchesMac.Controllers
 		[HttpPost]
 		public ActionResult Save([FromBody] User user)
 		{
-
-			var newUser = new User()
-			{
-				Id = user.Id,
-				Nome = user.Nome,
-				Idade = user.Idade
-			};
 			if (user.Id == 0)
 			{
-				using (var connection = new SqlConnection(connectionString))
-				{
-
-					var query = "INSERT INTO [User] VALUES (@Nome, @Idade)";
-					connection.Execute(query, new { newUser.Nome, newUser.Idade });
-
-				}
+				SqlExcute("INSERT INTO [User] VALUES (@Nome, @Idade)", new { user.Nome, user.Idade });
 			}
 			else
 			{
-				using (var connection = new SqlConnection(connectionString))
-				{
-
-					var query = "UPDATE [User] SET Nome=@Nome, Idade=@Idade Where Id=@Id";
-					connection.Execute(query, new { newUser.Id, newUser.Nome, newUser.Idade });
-
-				}
+				SqlExcute("UPDATE [User] SET Nome=@Nome, Idade=@Idade Where Id=@Id", new { user.Id, user.Nome, user.Idade });
 			}
 
-			var result = new ContentResultModel
+			return Ok(new ContentResultModel
 			{
-				Status = true,
-				Message = "Usuário salvo com sucesso!"
-
-			};
-			return Ok(result);
+				Status = true
+			});
 		}
 
 		public List<User> GetAll()
@@ -93,19 +72,29 @@ namespace LanchesMac.Controllers
 				return View(model);
 			}
 		}
+		[HttpDelete]
 		public IActionResult Delete(int Id)
+		{
+			SqlExcute("DELETE FROM [User] where Id =@Id", new { Id = Id });
+
+			return Ok(new ContentResultModel
+			{
+				Status = true
+			});
+		}
+		private void SqlExcute(string query, object parameters)
 		{
 			using (var connection = new SqlConnection(connectionString))
 			{
-				var query = "DELETE FROM [User] where Id =@Id ";
-				connection.Execute(query, new
-				{
-					Id = Id
-				});
+				connection.Execute(query, parameters);
 			}
-			var model = new UserViewModel();
-			model.Users = GetAll();
-			return View("List", model);
+		}
+		private void SqlQuery(string query, object parameters)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Query(query, parameters);
+			}
 		}
 	}
 }

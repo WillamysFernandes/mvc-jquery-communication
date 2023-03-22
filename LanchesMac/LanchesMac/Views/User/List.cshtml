@@ -1,33 +1,49 @@
 ﻿@model LanchesMac.ViewModels.UserViewModel;
 
 <a href="@Url.Action("New", "User")"><i style="font-size:30px" class="bi bi-plus-circle"></i></a>
-<table id="tableUsers" class="table table-striped table-bordered">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<th id="nome">Nome</th>
-			<th id="idade">Idade</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-</table>
 
+<div class="table-responsive">
+	<table id="tableUsers" class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th id="nome">Nome</th>
+				<th id="idade">Idade</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+	</table>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<h5 class="modal-title" id="exampleModalLabel">ATENÇÃO!</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				...
+				Desejea excluir o usuário permanentemente ?
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Confirmar</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="button" id="btnConfirm" class="btn btn-primary" data-bs-dismiss="modal">Confirmar</button>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+	<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<img src="..." class="rounded me-2" alt="...">
+			<strong class="me-auto">Bootstrap</strong>
+			<small>11 mins ago</small>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Fechar"></button>
+		</div>
+		<div class="toast-body">
+			Usuário deletado com sucesso!
 		</div>
 	</div>
 </div>
@@ -35,9 +51,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+
 <script>
 	var model = @(Html.Raw(Json.Serialize(Model)));
-
+	var currentUser;
 	var table = $('#tableUsers').DataTable({
 		dom: 'Bfrtip',
 		language: {
@@ -80,9 +97,9 @@
 				"data": "id",
 				render: function (data, type, full, meta) {
 
-					return '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">'+
+					return '<button type="button" id="btndelete" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">' +
 						'<i class="bi bi-trash"></i>' +
-							'</button>';
+						'</button>';
 
 					//return '<a class="btn_Delete" type="button" href="/User/Delete?Id=' + data + '"><i class="bi bi-trash"></i></i></a>';
 
@@ -91,4 +108,39 @@
 
 		]
 	});
+
+	$('#tableUsers tbody tr').on('click', function () {
+		currentUser = table.row(this).data();
+	});
+
+	$("#btnConfirm").click(function () {
+
+		$.ajax({
+			type: "DELETE",
+			url: "/User/Delete",
+			data: {
+				Id: currentUser.id
+			},
+			success: function (result) {
+
+				if (result.status == true) {
+
+					table.clear();
+					table.rows.add(model.users.filter(user => user.id != currentUser.id));
+					table.rows().draw();
+
+					var toastDelete = document.getElementById('liveToast');
+					var toast = new bootstrap.Toast(toastDelete);
+
+					toast.show();
+				}
+			},
+			error: function (result) {
+				alert("Data not found");
+			}
+		});
+	});
+
+
+
 </script>
