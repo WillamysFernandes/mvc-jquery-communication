@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\user.png" />
+  </ItemGroup>
+
 </Project>

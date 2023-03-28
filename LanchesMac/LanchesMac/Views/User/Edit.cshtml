@@ -1,18 +1,55 @@
 ﻿@model LanchesMac.ViewModels.EditViewModel;
-<div class="input-group mb-3">
-	<input id="txt_id" type="number" class="form-control" placeholder="Id" aria-label="Username" aria-describedby="basic-addon1">
-</div>
-<div class="input-group mb-3">
 
-	<input id="txt_nome" type="text" class="form-control" placeholder="Nome" aria-label="Username" aria-describedby="basic-addon1">
-</div>
-
-<div class="input-group mb-3">
-	<input id="txt_idade" type="text" class="form-control" placeholder="Idade" aria-label="Username" aria-describedby="basic-addon1">
-</div>
-
-<button id="btn_save" type="button" class="btn btn-outline-primary">Salvar</button>
-
+<form class="row g-3">
+	<div class="contaier"id="profile">
+		<span id="photo">
+			<img src="~/images/user.png" id="foto" class="img-thumbnail" alt="">
+		</span>
+		<div id="GitProfile">
+			<a id="newhref" href="" target="_blank">
+				<b><span id="nameProfile"></span></b>
+			</a>
+			<span id="joborProfession"></span>
+		</div>
+	</div>
+	<div class="input-group mb-3">
+		<input id="txt_id" type="number" disabled class="form-control" placeholder="Id" aria-label="Username" aria-describedby="basic-addon1">
+	</div>
+	<div class="col-md-6">
+		<label for="inputEmail4" class="form-label">Nome</label>
+		<input type="text" class="form-control" id="txt_nome" />
+	</div>
+	<div class="col-md-6">
+		<label for="inputPassword4" class="form-label">Idade</label>
+		<input type="number" class="form-control" id="txt_idade">
+	</div>
+	<div class="col-md-6">
+		<label for="inputEmail4" class="form-label">Login</label>
+		<input type="text" class="form-control" id="txt_login">
+	</div>
+	<div class="col-md-6" id="password">
+		<label for="inputEmail4" id="txt_password " class="form-label">Senha</label>
+		<input type="text" class="form-control" id="txt_password">
+	</div>
+	<div class="col-md-4">
+		<label for="inputState" class="form-label">Sexo</label>
+		<select id="txt_sexo" class="form-select">
+			<option value="M" selected>Masculino</option>
+			<option value="F">Feminino</option>
+		</select>
+	</div>
+	<div class="col-md-2">
+		<label for="inputZip" class="form-label">Data de Nascimento</label>
+		<input type="date" class="form-control" id="date">
+	</div>
+	<div class="col-md-6">
+		<label for="inputPassword4" class="form-label">Github</label>
+		<input type="text" class="form-control" id="txt_github">
+	</div>
+	<div class="col-12">
+		<button id="btn_save" type="button" class="btn btn-outline-primary">Salvar</button>
+	</div>
+</form>
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
 	<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
 		<div class="toast-header">
@@ -20,6 +57,7 @@
 			<strong class="me-auto">Bootstrap</strong>
 			<small>11 mins ago</small>
 			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+
 		</div>
 		<div class="toast-body">
 			Usuário salvo com sucesso!
@@ -27,28 +65,67 @@
 	</div>
 </div>
 
+
+
 @section scripts{
 	<script>
 		var model = @(Html.Raw(Json.Serialize(Model)));
 
-
 		$(document).ready(function () {
 			if (model.user !== null) {
-				$("#txt_id").prop("disabled", true);
+				var nameGitHub = model.user.gitHub;
+				var Dnascimento = new Date(model.user.dataNascimento).toISOString().slice(0, 10);
+				var gitHub = $("#txt_github").val(model.user.gitHub);
+
+				$("#txt_id").hide()
 				$("#txt_id").val(model.user.id)
 				$("#txt_nome").val(model.user.nome)
 				$("#txt_idade").val(model.user.idade)
-			}else{
+				$("#txt_login").val(model.user.login)
+				$("#txt_github").val(model.user.gitHub)
+				$("#password").hide()
+				$("#txt_sexo").val(model.user.sexo)
+				$("#date").val(Dnascimento)
+
+				$.ajax({
+					type: "GET",
+					url: "https://api.github.com/users/" + nameGitHub + "",
+					success: function (result) {
+						var dados = {
+							result
+						}
+						var photoPerfil = dados.result.avatar_url;
+						$("#foto").attr("src", photoPerfil);
+						document.getElementById("nameProfile").textContent = dados.result.name;
+						document.getElementById("joborProfession").textContent = dados.result.bio;
+						document.getElementById("newhref").href = dados.result.html_url;
+
+					},
+					error: function (result) {
+						alert("Data not found");
+					}
+				});
+			} else {
 				$("#txt_id").hide()
 				$("#txt_nome").val("")
 				$("#txt_idade").val("")
+				$("#txt_login").val("")
+				$("#txt_password").val("")
+				$("#txt_github").val("")
+				$("#txt_sexo").val("")
+				$("#date").val("")
 			}
 		});
 		$("#btn_save").click(function () {
 			var user = {
 				id: $("#txt_id").val() == "" ? 0 : $("#txt_id").val(), // if ternario
 				nome: $("#txt_nome").val(),
-				idade: $("#txt_idade").val()
+				idade: $("#txt_idade").val(),
+				login: $("#txt_login").val(),
+				password: $("#txt_password").val(),
+				github: $("#txt_github").val(),
+				sexo: $("#txt_sexo").val(),
+				datanascimento: $("#date").val()
 			}
 			$.ajax({
 				type: "POST",
@@ -58,14 +135,17 @@
 				data: JSON.stringify(user),
 				success: function (result) {
 
-					if (result.status==true) {
+					if (result.status == true) {
 
 						var toastLiveExample = document.getElementById('liveToast');
 						var toast = new bootstrap.Toast(toastLiveExample);
 
 						toast.show();
-						
 					}
+
+					setTimeout(function () {
+						(window.location.href = '/User/List')
+					}, 1000)
 				},
 				error: function (result) {
 					alert("Data not found");

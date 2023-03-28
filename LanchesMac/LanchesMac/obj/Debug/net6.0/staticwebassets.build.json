@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/fR4BcbKR81gpPRtjrtpbxy6ScsNYiTYw0YWW8sA21A=",
+  "Hash": "9f24Lr1UFGUOXvwDwxapq7Fj4IVZeZNuFKrfQfb23uk=",
   "Source": "LanchesMac",
   "BasePath": "_content/LanchesMac",
   "Mode": "Default",
@@ -85,12 +85,12 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\images\\carrousel.jpg",
+      "Identity": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\images\\user.png",
       "SourceId": "LanchesMac",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\",
       "BasePath": "_content/LanchesMac",
-      "RelativePath": "images/carrousel.jpg",
+      "RelativePath": "images/user.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -99,41 +99,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\carrousel.jpg"
-    },
-    {
-      "Identity": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\images\\carrousel2.jpg",
-      "SourceId": "LanchesMac",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\",
-      "BasePath": "_content/LanchesMac",
-      "RelativePath": "images/carrousel2.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\carrousel2.jpg"
-    },
-    {
-      "Identity": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\images\\carrousel3.jpg",
-      "SourceId": "LanchesMac",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\",
-      "BasePath": "_content/LanchesMac",
-      "RelativePath": "images/carrousel3.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\carrousel3.jpg"
+      "OriginalItemSpec": "wwwroot\\images\\user.png"
     },
     {
       "Identity": "C:\\DEV\\LanchesMac\\LanchesMac\\wwwroot\\js\\site.js",

@@ -1,0 +1,68 @@
+﻿@{
+	Layout = null;
+}
+<style>
+	.container {
+		top: 300px;
+		width: 700px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+</style>
+<form class="row g-3">
+	<div class="container">
+		<label for="inputEmail4" class="form-label">Usuário</label>
+		<input type="text" id="txtlogin" class="form-control" required>
+
+		<label for="inputPassword4" class="form-label">Senha</label>
+		<input type="password" id="nmbPassWord" class="form-control" required>
+	</div>
+	<div class="col-md-2">
+		<label class="form-label">Não possui cadastro ?</label>		<a href="@Url.Action("Edit", "User")"><i style="font-size:30px"></i>Cadastrar-me</a>
+	</div>
+	<div class="col-12">
+		<button type="submit" id="btnentrar" class="btn btn-primary">Entar</button>
+	</div>
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+		<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<img src="..." class="rounded me-2" alt="...">
+				<strong class="me-auto">Bootstrap</strong>
+				<small>11 mins ago</small>
+				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body">
+				Login não encontrado!
+			</div>
+		</div>
+	</div>
+
+
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+<script>
+
+	$("#btnentrar").click(function () {
+		var user = {
+			login: $("#txtlogin").val(),
+			password: $("#nmbPassWord").val()
+		}
+		$.ajax({
+			type: "POST",
+			url: "/Authenticate/LoginCompare",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify(user),
+			success: function (result) {
+
+				if (result.status == true) {
+					(window.location.href = '/User/List')
+				}
+			},
+			error: function (result) {
+				alert("Login não encontrado!");
+			}
+		});
+	});
+</script>

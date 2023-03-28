@@ -16,3 +16,44 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#photo {
+    height: 130px;
+    display: inline-block;
+    width: 130px;
+    overflow: hidden;
+    border-radius: 50%;
+    position: relative; 
+}
+#photo img{
+    width: 100%;
+    bottom: 0;
+    position:absolute;
+    
+}
+
+.container {
+    max-width: 200px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+}
+
+#newhref {
+    text-decoration: none;
+    color: black;
+}
+#GitProfile{
+    display:flex;
+    flex-direction: column;
+    width: 50%;
+    padding-left:10px;
+}
+#profile{
+    display:flex;
+    align-items: center;
+
+}
+#nameProfile{
+    font-size: 1.5rem;
+}
